@@ -18,7 +18,7 @@ resource "aws_lb" "foundry_loadbalancer" {
   }
 }
 resource "aws_lb_listener" "front_end" {
-  load_balancer_arn = aws_lb.front_end.arn
+  load_balancer_arn = aws_lb.foundry_loadbalancer.arn
   port              = "80"
   protocol          = "HTTP"
 
