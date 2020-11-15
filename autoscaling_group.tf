@@ -11,7 +11,7 @@ resource "aws_autoscaling_group" "foundryvtt_autoscaling_group" {
   }
 }
 
-# resource "aws_autoscaling_attachment" "foundryvtt_asg_attachment" {
-#   autoscaling_group_name = aws_autoscaling_group.foundryvtt_autoscaling_group.id
-#   elb                    = aws_lb.foundry_loadbalancer.id
-# }
+resource "aws_autoscaling_attachment" "foundryvtt_asg_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.foundryvtt_autoscaling_group.id
+  elb                    = aws_lb.foundry_loadbalancer.id
+}
