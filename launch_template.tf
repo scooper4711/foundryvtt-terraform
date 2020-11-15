@@ -9,6 +9,6 @@ resource "aws_launch_template" "foundryvtt_launchtemplate" {
       Name = "Foundry VTT"
     }
   }
-  vpc_security_group_ids = [aws_security_group.allow_foundry.id, aws_security_group.ssh_from_home.id]
+  vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.allow_foundry.id, aws_security_group.ssh_from_home.id]
   user_data = filebase64("${path.module}/startup.sh")
 }
