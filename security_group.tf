@@ -23,7 +23,7 @@ resource "aws_security_group" "allow_http" {
   }
 }
 
-resource "aws_security_gropu" "allow_load_balancer" {
+resource "aws_security_group" "allow_load_balancer" {
   name        = "load_balancer"
   description = "required by https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html"
   vpc_id      = aws_default_vpc.default.id
