@@ -1,6 +1,6 @@
 resource "aws_launch_template" "foundryvtt-launchtemplate" {
   name = "foundryvtt-launchtemplate"
-
+  
   block_device_mappings {
     device_name = "/dev/sda1"
 
