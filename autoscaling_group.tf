@@ -5,7 +5,6 @@ resource "aws_autoscaling_group" "foundryvtt_autoscaling_group" {
   desired_capacity   = 1
   max_size           = 1
   min_size           = 1
-  vpc_zone_identifier = [aws_default_subnet.default_az1.id,aws_default_subnet.default_az2.id]
   launch_template {
     id      = aws_launch_template.foundryvtt_launchtemplate.id
     version = "$Latest"
