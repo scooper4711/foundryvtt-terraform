@@ -1,5 +1,5 @@
-resource "aws_lb_target_group" "test" {
-  name     = "tf-foundry-lb-tg"
+resource "aws_lb_target_group" "foundry-lb-tg" {
+  name     = "foundry-lb-tg"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_default_vpc.default.id
