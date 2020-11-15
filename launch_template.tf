@@ -10,5 +10,5 @@ resource "aws_launch_template" "foundryvtt_launchtemplate" {
     }
   }
 
-  user_data = filebase64("${path.module}/example.sh")
+  user_data = filebase64("${path.module}/startup.sh")
 }
