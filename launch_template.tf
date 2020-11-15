@@ -10,5 +10,5 @@ resource "aws_launch_template" "foundryvtt_launchtemplate" {
     }
   }
 
-  user_data = "sudo yum update true;node $HOME/foundryvtt/resources/app/main.js --dataPath=$HOME/foundrydata --nopnp --hostname=inharnsway.com"
+  user_data = filebase64("${path.module}/example.sh")
 }
