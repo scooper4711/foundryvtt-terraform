@@ -1,5 +1,6 @@
 
 resource "aws_autoscaling_group" "foundryvtt_autoscaling_group" {
+  name               = "foundryvtt_autoscaling_group"
   availability_zones = ["us-west-2a"]
   desired_capacity   = 1
   max_size           = 1
