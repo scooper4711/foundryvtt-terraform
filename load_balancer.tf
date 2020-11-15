@@ -3,7 +3,7 @@ resource "aws_lb" "foundry-loadbalancer" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.allow_foundry.id]
-  subnets            = [aws_default_subnet.*.id]
+  subnets            = [aws_default_subnet.default_az1.id,aws_default_subnet.default_az2.id]
 
   enable_deletion_protection = true
 
