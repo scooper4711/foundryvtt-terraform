@@ -8,10 +8,6 @@ resource "aws_lb_target_group" "foundry_lb_tg" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "foundry_instance_attachment" {
-  target_group_arn = aws_lb_target_group.foundry_lb_tg.id
-  target_id        = 
-}
 resource "aws_lb" "foundry_loadbalancer" {
   name               = "foundry-loadbalancer"
   internal           = false
