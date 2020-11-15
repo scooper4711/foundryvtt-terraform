@@ -1,6 +1,6 @@
 resource "aws_security_group" "allow_foundry" {
-  name        = "allow_tls"
-  description = "Allow TLS inbound traffic"
+  name        = "allow_foundry"
+  description = "Allow Foundry inbound traffic"
   vpc_id      = aws_default_vpc.default.id
 
   ingress {
