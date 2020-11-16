@@ -9,7 +9,7 @@ data "aws_ami" "foundry_ami" {
 }
 
 resource "aws_ebs_volume" "foundrydata" {
-  availability_zone = aws_default_subnet.default_az1.id
+  availability_zone = aws_default_subnet.default_az1.availability_zone
   size              = 40
 
   tags = {
