@@ -5,7 +5,7 @@ yum update all
 yum -y install httpd
 cat > /etc/httpd/conf.d/foundry.conf <<eof
 <VirtualHost *:80>
-    ServerName              inharnsway.com
+    ServerName              www.inharnsway.com
 
     # Proxy Server Configuration
     ProxyPreserveHost       On
@@ -21,7 +21,7 @@ LimitRequestBody 104857600
 eof
 cat > /home/ec2-user/foundrydata/Config/options.json <<eof
 {
-  "hostname": "inharnsway.com",
+  "hostname": "www.inharnsway.com",
   "routePrefix": null,
   "sslCert": null,
   "sslKey": null,
