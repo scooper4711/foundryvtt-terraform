@@ -10,7 +10,7 @@ data "aws_ami" "foundry_ami" {
 
 resource "aws_instance" "foundry" {
   # us-west-2
-  ami           = aws_ami.foundry_ami.id
+  ami           = data.aws_ami.foundry_ami.id
   instance_type = "t2.micro"
   user_data     = filebase64("${path.module}/startup.sh")
   subnet_id  = aws_default_subnet.default_az1.id
