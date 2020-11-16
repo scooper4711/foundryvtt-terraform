@@ -2,7 +2,7 @@
 data "aws_ami" "foundry-ami" {
   executable_users = ["self"]
   most_recent      = true
-  name_regex       = "^foundryvtt\\d\\.\\d\\.\\d"
+  name_regex       = "^foundryvtt.*"
   owners           = ["self"]
 }
 
