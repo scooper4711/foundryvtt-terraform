@@ -20,7 +20,7 @@ LimitRequestBody 104857600
 </Location>
 eof
 systemctl start httpd
-mount /dev/sdb /home/ec2-user/foundrydata
+mount /dev/sdb1 /home/ec2-user/foundrydata
 FOUNDRY_CONF=/home/ec2-user/foundrydata/Config/options.json
 mkdir -p $(dirname $FOUNDRY_CONF)
 cat > ${FOUNDRY_CONF} <<eof
