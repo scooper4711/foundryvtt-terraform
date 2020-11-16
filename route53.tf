@@ -5,9 +5,6 @@ resource "aws_route53_record" "www" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = "www.inharnsway.com"
   type    = "A"
-  alias {
-    name                   = aws_lb.foundry_loadbalancer.dns_name
-    zone_id                = aws_lb.foundry_loadbalancer.zone_id
-    evaluate_target_health = true
-  }
+  ttl     = "300"
+  records = [aws_instance.foundry.public_ip]
 }
