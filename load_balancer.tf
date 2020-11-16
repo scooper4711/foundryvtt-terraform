@@ -1,7 +1,7 @@
 resource "aws_lb_target_group" "foundry_lb_tg" {
   name     = "foundry-lb-tg"
   port     = 30000
-  protocol = "GENEVE"
+  protocol = "TCP"
   vpc_id   = aws_default_vpc.default.id
   health_check {
       port = 30000
