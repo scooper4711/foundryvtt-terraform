@@ -9,7 +9,6 @@ data "aws_ami" "foundry_ami" {
 }
 
 resource "aws_instance" "foundry" {
-  name            = "Foundry VTT"
   ami             = data.aws_ami.foundry_ami.id
   instance_type   = "t4g.micro"
   user_data       = filebase64("${path.module}/startup.sh")
