@@ -24,30 +24,17 @@ LimitRequestBody 104857600
 </Location>
 eof
 systemctl start httpd
-FOUNDRY_CONF=/home/ec2-user/foundrydata/Config/options.json
-mkdir -p $(dirname $FOUNDRY_CONF)
-cat > ${FOUNDRY_CONF} <<eof
-{
-  "hostname": "www.inharnsway.com",
-  "routePrefix": null,
-  "sslCert": null,
-  "sslKey": null,
-  "port": 30000,
-  "proxyPort": 80,
-  "upnp": false,
-  "fullscreen": false,
-  "routePrefix": null,
-  "sslCert": null,
-  "sslKey": null,
-  "awsConfig": null,
-  "dataPath": "/home/ec2-user/foundrydata",
-  "proxySSL": false,
-  "proxyPort": null,
-  "minifyStaticFiles": false,
-  "updateChannel": "release",
-  "language": "en.core",
-  "world": null
-}
+systemctl enable httpd
+cat > /etc/systemd/system/foundryvtt.service <<eof
+[Unit]
+Description=Foundry VTT
+
+[Service]
+ExecStart=/usr/bin/node /home/ec2-user/foundryvtt/resources/app/main.js --dataPath=/home/ec2-user/foundrydata
+User=ec2-user
+
+[Install]
+WantedBy=default.target
 eof
-chown -R ec2-user:ec2-user /home/ec2-user/foundrydata
-su - ec2-user -c "node /home/ec2-user/foundryvtt/resources/app/main.js --dataPath=/home/ec2-user/foundrydata"
+systemctl start foundryvtt
+systemctl enable foundryvtt

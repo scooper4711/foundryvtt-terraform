@@ -12,3 +12,8 @@ variable "instance_size" {
     type        = string
     description = "The size of the instance to run"
 }
+
+variable "domain" {
+    type        = string
+    description = "The domain name you want for your VTT"
+}
