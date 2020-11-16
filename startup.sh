@@ -19,7 +19,9 @@ cat > /etc/httpd/conf.d/foundry.conf <<eof
 LimitRequestBody 104857600 
 </Location>
 eof
+systemctl start httpd
 FOUNDRY_CONF=/home/ec2-user/foundrydata/Config/options.json
+mkdir -p $(dirname $FOUNDRY_CONF)
 cat > ${FOUNDRY_CONF} <<eof
 {
   "hostname": "www.inharnsway.com",
@@ -43,5 +45,5 @@ cat > ${FOUNDRY_CONF} <<eof
   "world": null
 }
 eof
-chown ec-user:ec2-user ${FOUNDRY_CONF}
-su - ec2-user -c "node /home/ec2-user/foundryvtt/resources/app/main.js"
+chown -R ec2-user:ec2-user /home/ec2-user/foundrydata
+su - ec2-user -c "node /home/ec2-user/foundryvtt/resources/app/main.js --dataPath=/home/ec2-user/foundrydata"

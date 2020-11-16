@@ -1,7 +1,7 @@
 
 data "aws_ami" "foundry_ami" {
   most_recent      = true
-  owners           = ["063843753876"]
+  owners           = [var.ami_owner]
   filter {
     name   = "name"
     values = ["foundryvtt*"]
@@ -9,10 +9,10 @@ data "aws_ami" "foundry_ami" {
 }
 
 resource "aws_instance" "foundry" {
-  # us-west-2
-  ami           = data.aws_ami.foundry_ami.id
-  instance_type = "t2.micro"
-  user_data     = filebase64("${path.module}/startup.sh")
-  subnet_id  = aws_default_subnet.default_az1.id
+  name            = "Foundry VTT"
+  ami             = data.aws_ami.foundry_ami.id
+  instance_type   = "t4g.micro"
+  user_data       = filebase64("${path.module}/startup.sh")
+  subnet_id       = aws_default_subnet.default_az1.id
   security_groups = [aws_security_group.allow_http.id,aws_security_group.ssh_from_home.id]
 }

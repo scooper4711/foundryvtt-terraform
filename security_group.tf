@@ -34,14 +34,7 @@ resource "aws_security_group" "ssh_from_home" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["71.218.118.143/32"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.home_cidr]
   }
 
   tags = {
