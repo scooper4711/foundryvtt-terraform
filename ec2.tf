@@ -3,7 +3,6 @@ data "aws_ami" "foundry-ami" {
   executable_users = ["self"]
   most_recent      = true
   name_regex       = "^foundryvtt.*"
-  owners           = ["self"]
 }
 
 resource "aws_instance" "foundry" {
