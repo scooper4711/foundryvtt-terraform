@@ -3,7 +3,8 @@ echo "Starting user data"
 whoami
 yum update -y
 
-cat > /home/ec2-user/foundrydata/Config/options.json <<eof
+FOUNDRY_CONF=/home/ec2-user/foundrydata/Config/options.json
+cat > ${FOUNDRY_CONF} <<eof
 {
   "hostname": "www.inharnsway.com",
   "routePrefix": null,
@@ -13,7 +14,6 @@ cat > /home/ec2-user/foundrydata/Config/options.json <<eof
   "proxyPort": 80,
   "upnp": false,
   "fullscreen": false,
-  "hostname": null,
   "routePrefix": null,
   "sslCert": null,
   "sslKey": null,
@@ -27,6 +27,5 @@ cat > /home/ec2-user/foundrydata/Config/options.json <<eof
   "world": null
 }
 eof
-chown ec-user:ec2-user /home/ec2-user/foundrydata/Config/options.json
-systemctl start httpd
-su - ec2-user -c "node /home/ec2-user/foundryvtt/resources/app/main.js --dataPath=/home/ec2-user/foundrydata --nopnp --hostname=inharnsway.com"
+chown ec-user:ec2-user ${FOUNDRY_CONF}
+su - ec2-user -c "node /home/ec2-user/foundryvtt/resources/app/main.js"
