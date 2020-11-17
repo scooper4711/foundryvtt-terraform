@@ -1,5 +1,5 @@
 resource "aws_iam_role" "foundry_s3_access" {
-  name = "test_role"
+  name = "foundry_s3_access"
 
   assume_role_policy = <<EOF
 {
@@ -8,7 +8,6 @@ resource "aws_iam_role" "foundry_s3_access" {
         {
             "Effect": "Allow",
             "Action": "s3:ListAllMyBuckets",
-            "Resource": "*"
         }, 
         {
             "Effect": "Allow",
@@ -28,7 +27,7 @@ resource "aws_iam_role" "foundry_s3_access" {
 EOF
 }
 
-resource "aws_s3_bucket" "vtt-assets" {
+resource "aws_s3_bucket" "vtt-assets-inharnsway" {
   bucket = "my-tf-test-bucket"
   acl    = "public-read"
   cors_rule {
