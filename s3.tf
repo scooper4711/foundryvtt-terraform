@@ -7,7 +7,7 @@ resource "aws_iam_role" "foundry_s3_access" {
     "Statement": [
         {
             "Effect": "Allow",
-            "Action": "s3:ListAllMyBuckets",
+            "Action": "s3:ListAllMyBuckets"
         }, 
         {
             "Effect": "Allow",
