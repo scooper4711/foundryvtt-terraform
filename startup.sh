@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "Starting user data"
-whoami
+hostnamectl set-hostname foundryvtt.inharnsway.com
 cat >> /etc/fstab <<eof
-UUID=c7508198-a41f-45ca-b3d3-fb67244610f8     /home/ec2-user/foundrydata           xfs    defaults,noatime  1   1
+/dev/sdb     /home/ec2-user/foundrydata           xfs    defaults,noatime  1   1
 eof
 mount /home/ec2-user/foundrydata
 yum update -y
