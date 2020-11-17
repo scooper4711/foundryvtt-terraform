@@ -1,13 +1,14 @@
-resource "aws_iam_role" "foundry_s3_access" {
-  name = "foundry_s3_access"
-
-  assume_role_policy = <<EOF
+resource "aws_iam_role_policy" "foundry_s3_access_policy" {
+  name = "foundry_s3_access_policy"
+  role = aws_iam_role.foundry_role.id
+  policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
         {
             "Effect": "Allow",
-            "Action": "s3:ListAllMyBuckets"
+            "Action": "s3:ListAllMyBuckets",
+            "Resource": "*"
         }, 
         {
             "Effect": "Allow",
@@ -16,13 +17,35 @@ resource "aws_iam_role" "foundry_s3_access" {
                 "s3:ListBucket",
                 "s3:PutObject",
                 "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "arn:aws:s3:::vtt-assets",
+                "arn:aws:s3:::vtt-assets/*"
             ]
         }
     ]
 }
 EOF
 }
+resource "aws_iam_role" "foundry_role" {
+  name = "foundry_role"
 
+  assume_role_policy = <<-EOF
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": "sts:AssumeRole",
+        "Principal": {
+          "Service": "ec2.amazonaws.com"
+        },
+        "Effect": "Allow",
+        "Sid": ""
+      }
+    ]
+  }
+  EOF
+}
 resource "aws_s3_bucket" "vtt-assets-inharnsway" {
   bucket = "vtt-assets-inharnsway"
   acl    = "public-read"
