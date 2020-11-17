@@ -24,7 +24,7 @@ EOF
 }
 
 resource "aws_s3_bucket" "vtt-assets-inharnsway" {
-  bucket = "my-tf-test-bucket"
+  bucket = "vtt-assets-inharnsway"
   acl    = "public-read"
   cors_rule {
     allowed_headers = ["*"]
