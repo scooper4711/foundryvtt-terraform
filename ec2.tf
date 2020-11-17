@@ -21,7 +21,7 @@ resource "aws_instance" "foundry" {
   instance_type   = var.instance_size
   user_data       = filebase64("${path.module}/startup.sh")
   subnet_id       = aws_default_subnet.default_az1.id
-  security_groups = [aws_security_group.allow_http.id,aws_security_group.ssh_from_home.id]
+  security_groups = [aws_security_group.allow_http.name,aws_security_group.ssh_from_home.name]
 }
 
 resource "aws_volume_attachment" "ebs_att" {

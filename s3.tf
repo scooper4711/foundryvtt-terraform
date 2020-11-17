@@ -17,10 +17,6 @@ resource "aws_iam_role" "foundry_s3_access" {
                 "s3:PutObject",
                 "s3:PutObjectAcl"
             ],
-            "Resource": [
-                "arn:aws:s3:::vtt-assets",
-                "arn:aws:s3:::vtt-assets/*"
-            ]
         }
     ]
 }
