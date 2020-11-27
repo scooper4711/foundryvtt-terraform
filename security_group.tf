@@ -23,7 +23,7 @@ resource "aws_security_group" "allow_http" {
     description = "Audio/Video relay master port"
     from_port   = 33478
     to_port     = 33478
-    protocol    = "tcp"
+    protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -31,7 +31,7 @@ resource "aws_security_group" "allow_http" {
     description = "Audio/Video relay client ports"
     from_port   = 49152
     to_port     = 65535
-    protocol    = "tcp"
+    protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
