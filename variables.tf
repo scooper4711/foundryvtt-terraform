@@ -32,6 +32,6 @@ variable "availability_zone" {
 
 variable "foundry_download" {
     type        = string
-    default     = null
+    default     = ""
     description = "The URL to download FoundryVTT software from. Valid for only 5 minutes. Omit if your AMI already has FoundryVTT software"
 }
