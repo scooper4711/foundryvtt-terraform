@@ -1,21 +1,74 @@
 #!/bin/bash
 echo "Starting user data"
-hostnamectl set-hostname foundryvtt.inharnsway.com
-cat >> /etc/fstab <<eof
+echo "Set a consistent server name for FoundryVTT Licensing"
+hostnamectl set-hostname foundryvtt.${domain}
+
+if [[ ! -z ${foundry_download} && ! -d /home/ec2-user/foundryvtt ]] ; then
+    echo "Downloading FoundryVTT software"
+    mkdir /home/ec2-user/foundryvtt
+    wget -O foundryvtt.zip "${foundry_download}"
+    unzip -d /home/ec2-user/foundryvtt foundryvtt.zip
+    chown -R ec2-user:ec2-user /home/ec2-user/foundryvtt
+fi
+
+if ( ! grep -q foundrydata /etc/fstab ); then 
+    echo "Mount the EBS volume for foundrydata"
+    mkdir /home/ec2-user/foundrydata
+    chown ec2-user:ec2-user /home/ec2-user/foundrydata
+    cat >> /etc/fstab <<eof
 /dev/sdb     /home/ec2-user/foundrydata           xfs    defaults,noatime  1   1
 eof
-mount /home/ec2-user/foundrydata
-yum update -y
-yum -y install httpd
-cat > /etc/httpd/conf.d/foundry.conf <<eof
-<VirtualHost *:80>
-    ServerName              www.inharnsway.com
+    mount /home/ec2-user/foundrydata
+fi
 
+echo "Update to the lastest of all software, and install https"
+yum update -y
+yum -y install httpd mod_ssl
+
+if [[ ! -d /root/.acme.sh ]]; then
+    echo "Get certificate from let's encrypt"
+    mkdir /etc/pki/tls/certs/${domain}
+    curl https://get.acme.sh | sh
+    # Need http running to get a cert issued
+    systemctl start httpd
+    /root/.acme.sh/acme.sh --issue -d www.${domain} -w /var/www/html --debug
+    /root/.acme.sh/acme.sh --install-cert -d www.${domain} \
+        --cert-file /etc/pki/tls/certs/${domain}/cert.pem \
+        --key-file /etc/pki/tls/certs/${domain}/key.pem  \
+        --fullchain-file /etc/pki/tls/certs/${domain}/fullchain.pem
+fi
+
+if [[ ! -f /etc/httpd/conf.d/foundry.conf ]]; then
+    echo "Create http configuration for FoundryVTT"
+    cat > /etc/httpd/conf.d/foundry.conf <<eof
+<VirtualHost _default_:443>
+    ServerName              www.${domain}
     # Proxy Server Configuration
     ProxyPreserveHost       On
     ProxyPass "/socket.io/" "ws://localhost:30000/socket.io/"
     ProxyPass /             http://localhost:30000/
     ProxyPassReverse /      http://localhost:30000/
+    ErrorLog logs/ssl_error_log
+    TransferLog logs/ssl_access_log
+    LogLevel warn
+    SSLEngine on
+    SSLProtocol all -SSLv3
+    SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!SEED:!IDEA
+    SSLCertificateFile /etc/pki/tls/certs/${domain}/cert.pem
+    SSLCertificateKeyFile /etc/pki/tls/certs/${domain}/key.pem
+    SSLCertificateChainFile /etc/pki/tls/certs/${domain}/fullchain.pem
+    CustomLog logs/ssl_request_log \
+          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+</VirtualHost>
+<VirtualHost *:80>
+    ServerName              www.${domain}
+    # Anything starting with a 'dot' might be part of the let's encrypt program. Don't redirect it
+    <Location ~ "^/\..*$">
+    </Location>
+    # If it *doesn't start with a dot, then re-direct it to https.
+    <Location ~ "(^$|^/[^\.].*$)">
+        Redirect / https://www.${domain}/
+    </Location>
 </VirtualHost>
 # Increase the maximum upload limit Apache will allow
 <Location / >
@@ -23,9 +76,14 @@ cat > /etc/httpd/conf.d/foundry.conf <<eof
 LimitRequestBody 104857600 
 </Location>
 eof
-systemctl start httpd
+fi
+
+systemctl restart httpd
 systemctl enable httpd
-cat > /etc/systemd/system/foundryvtt.service <<eof
+
+if [[ ! -f /etc/systemd/system/foundryvtt.service ]]; then
+    echo "Create a foundryvtt service"
+    cat > /etc/systemd/system/foundryvtt.service <<eof
 [Unit]
 Description=Foundry VTT
 
@@ -36,5 +94,7 @@ User=ec2-user
 [Install]
 WantedBy=default.target
 eof
+fi
+
 systemctl start foundryvtt
 systemctl enable foundryvtt
