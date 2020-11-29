@@ -7,7 +7,7 @@ data "aws_ami" "foundry_ami" {
   owners           = [var.ami_owner]
   filter {
     name   = "name"
-    values = ["foundryvtt*"]
+    values = list(var.ami_wildcard)
   }
 }
 
