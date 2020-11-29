@@ -25,7 +25,7 @@ resource "aws_instance" "foundry" {
   user_data            = templatefile("${path.module}/startup.sh",{domain=var.domain, foundry_download=var.foundry_download})
   subnet_id            = aws_default_subnet.default_az1.id
   iam_instance_profile = aws_iam_instance_profile.foundry_profile.id
-  key_name             = aws_keypair.login.name
+  key_name             = aws_key_pair.login.name
 #  security_groups      = [aws_security_group.allow_http.name, aws_security_group.ssh_from_home.name]
 }
 
