@@ -57,8 +57,6 @@ if [[ ! -f /etc/httpd/conf.d/foundry.conf ]]; then
     SSLCertificateFile /etc/pki/tls/certs/${domain}/cert.pem
     SSLCertificateKeyFile /etc/pki/tls/certs/${domain}/key.pem
     SSLCertificateChainFile /etc/pki/tls/certs/${domain}/fullchain.pem
-    CustomLog logs/ssl_request_log \
-          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
 </VirtualHost>
 <VirtualHost *:80>
     ServerName              www.${domain}
