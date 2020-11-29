@@ -1,4 +1,7 @@
-
+resource "aws_eip" "foundry" {
+  instance = aws_instance.foundry.id
+  vpc      = true
+}
 data "aws_ami" "foundry_ami" {
   most_recent      = true
   owners           = [var.ami_owner]
