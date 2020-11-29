@@ -41,3 +41,8 @@ variable "foundry_download" {
     default     = ""
     description = "The URL to download FoundryVTT software from. Valid for only 5 minutes. Omit if your AMI already has FoundryVTT software"
 }
+
+variable "public_key" {
+    type        = string
+    description = "the public half of the key pair to allow you to ssh in."
+}
