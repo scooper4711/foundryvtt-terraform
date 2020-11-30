@@ -20,9 +20,23 @@ This guide assumes some familarity with AWS and limited familiarity with Terrafo
     - instance_size - optional - The EC2 instance type you want to use. t3a.micro works just fine.
     - region - optional - The region to deploy to. Pick one close to you and your players. 
     - foundry_download - optional - Your 5 minute URL for downloading FoundryVTT. If not provided, or if the software is already downloaded, then this variable has no effect. But it's required to get you started.
- 1. Queue the running of the plan
+ 1. Get your 5-minute URL for downloading Foundry and put it into the variable ```foundry_download```. ![Location of 5-minute-url](img/FoundryURL.png)
+ 1. Queue the running of the plan.
  1. The plan may not succeed this round (if nothing else, it will fail to get the SSL cert), but now you have Route53 set-up.
  1. In the AWS console, go to Route53, go to your hosted zone, and for your domain get the ```value/route traffic to``` values for your name servers.
  1. Wherever your registered your domain, update its DNS records to point to the values from the previous step. This may take some 10-30 minutes to propogate to the wider internet.
  1. Terminate your ec2 instance if it's running.
- 1. re-run your plan. Now the SSL cert should work.
+ 1. re-run your plan. Note that you may need to get a new 5-minute FoundryVTT download URL. Now the SSL cert should work.
+ 1. Log in to your FoundryVTT instance. You should be able to ssh to ec2-user@www.yourdomain.
+ 1. Edit the file foundrydata/Config/options.json and add the following
+    ```
+    "upnp": false,
+    "hostname": "www.<yourdomain>",
+    "dataPath": "/home/ec2-user/foundrydata",
+    "proxySSL": true,
+    "proxyPort": 443,
+    ```
+ 1. Restart your foundry by executing ```sudo systemctl restart foundryvtt```
+ 1. Your foundry should be available at https://www.${domain}.
+ 1. Once you validate that your foundry is working, you will want to make an AMI of it so you don't have to get new 5-minute URLs all the time.
+ 1. After you make your AMI, update the variables to point to to the AMI name and owner.
