@@ -6,12 +6,13 @@ variable "home_cidr" {
 variable "ami_owner" {
     type        = string
     description = "The owner id of the AMI for Foundry. This is found in the EC2->AMIs section of the AWS console."
+    default     = "137112412989"
 }
 
 variable "ami_wildcard" {
     type        = string
     description = "the pattern to match for the ec2 AMI. Will always take the most recent. If you want to start from scratch, *COPY* amzn2-ami-hvm-2.0.20201126.0-x86_64-gp2 to your AMIs"
-    default     = "foundryvtt*"
+    default     = "amzn2-ami-hvm-2.0.20201126.0-x86_64-gp2"
 }
 
 variable "instance_size" {
