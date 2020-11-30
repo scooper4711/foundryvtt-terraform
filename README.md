@@ -3,8 +3,8 @@ This guide assumes some familarity with AWS and limited familiarity with Terrafo
 
 # Prerequisites
  - A domain that you control and can update the DNS records to point to AWS Route53
- - A valid license for Foundry VTT
- - A free account on terraform.io
+ - A valid license for [Foundry VTT](https://foundryvtt.com)
+ - A free account on [terraform.io](https//terraform.io)
  - An AWS account, with an IAM user with admin acces, access key
    and secret access key.
 
@@ -32,6 +32,7 @@ This guide assumes some familarity with AWS and limited familiarity with Terrafo
  1. The plan may not succeed this round (if nothing else, it will fail to get the SSL cert), but now you have Route53 set-up.
  1. In the AWS console, go to Route53, go to your hosted zone, and for your domain get the ```value/route traffic to``` values for your name servers.
  1. Wherever your registered your domain, update its DNS records to point to the values from the previous step. This may take some 10-30 minutes to propogate to the wider internet.
+    - This will move all domain control away from your registrar and over to Route53 and Terraform.
  1. Terminate your ec2 instance if it's running.
  1. re-run your plan. Note that you may need to get a new 5-minute FoundryVTT download URL. Now the SSL cert should work.
  1. Log in to your FoundryVTT instance. You should be able to ssh to ec2-user@www.yourdomain.
