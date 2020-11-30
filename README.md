@@ -20,8 +20,15 @@ This guide assumes some familarity with AWS and limited familiarity with Terrafo
     - instance_size - optional - The EC2 instance type you want to use. t3a.micro works just fine.
     - region - optional - The region to deploy to. Pick one close to you and your players. 
     - foundry_download - optional - Your 5 minute URL for downloading FoundryVTT. If not provided, or if the software is already downloaded, then this variable has no effect. But it's required to get you started.
+ 1. Still in the Variables section, under environment variables, create/set the following variables (set to sensitive!)
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - AWS_DEFAULT_REGION (doesn't have to be set to sensitive)
+ 1. Here's what your variables screen should look like when done, if you specify all optional values:
+    - ![](img/Variables.png)
  1. Get your 5-minute URL for downloading Foundry and put it into the variable ```foundry_download```. ![Location of 5-minute-url](img/FoundryURL.png)
  1. Queue the running of the plan.
+ 1. Apply the plan.
  1. The plan may not succeed this round (if nothing else, it will fail to get the SSL cert), but now you have Route53 set-up.
  1. In the AWS console, go to Route53, go to your hosted zone, and for your domain get the ```value/route traffic to``` values for your name servers.
  1. Wherever your registered your domain, update its DNS records to point to the values from the previous step. This may take some 10-30 minutes to propogate to the wider internet.
