@@ -26,7 +26,7 @@ resource "aws_instance" "foundry" {
   subnet_id            = aws_default_subnet.default_az1.id
   iam_instance_profile = aws_iam_instance_profile.foundry_profile.id
   key_name             = aws_key_pair.login.key_name
-#  security_groups      = [aws_security_group.allow_http.name, aws_security_group.ssh_from_home.name]
+  security_groups      = [aws_security_group.allow_http.name, aws_security_group.ssh_from_home.name]
 }
 
 resource "aws_volume_attachment" "ebs_att" {
