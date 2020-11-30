@@ -6,5 +6,5 @@ resource "aws_route53_record" "www" {
   name    = "www.${var.domain}"
   type    = "A"
   ttl     = "300"
-  records = [aws_instance.foundry.public_ip]
+  records = [aws_eip.foundry.public_ip]
 }

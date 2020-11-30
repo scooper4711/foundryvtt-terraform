@@ -6,7 +6,7 @@ hostnamectl set-hostname foundryvtt.${domain}
 if [[ ! -z "${foundry_download}" && ! -d /home/ec2-user/foundryvtt ]] ; then
     echo "Downloading FoundryVTT software"
     mkdir /home/ec2-user/foundryvtt
-    wget -O foundryvtt.zip "${foundry_download}"
+    wget -nv -O foundryvtt.zip "${foundry_download}"
     unzip -d /home/ec2-user/foundryvtt foundryvtt.zip
     chown -R ec2-user:ec2-user /home/ec2-user/foundryvtt
 fi
@@ -21,13 +21,15 @@ eof
     mount /home/ec2-user/foundrydata
 fi
 
-echo "Update to the lastest of all software, and install https"
+echo "Update to the lastest of all software, and install node and https"
 yum update -y
-yum -y install httpd mod_ssl
+curl --silent --location https://rpm.nodesource.com/setup_12.x | bash -
+yum -y install httpd mod_ssl openssl-devel nodejs socat
 
 if [[ ! -d /root/.acme.sh ]]; then
     echo "Get certificate from let's encrypt"
     mkdir /etc/pki/tls/certs/${domain}
+    export HOME=/root
     curl https://get.acme.sh | sh
     # Need http running to get a cert issued
     systemctl start httpd
