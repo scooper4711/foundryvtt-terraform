@@ -62,7 +62,7 @@ resource "aws_dlm_lifecycle_policy" "backup_data" {
       create_rule {
         interval      = 24
         interval_unit = "HOURS"
-        times         = ["23:45"]
+        times         = ["09:00"]
       }
 
       retain_rule {
