@@ -11,6 +11,21 @@ data "aws_ami" "foundry_ami" {
   }
 }
 
+data "aws_ebs_snapshot" "latest_snapshot" {
+  most_recent = true
+  owners      = ["self"]
+
+  filter {
+    name   = "volume-size"
+    values = ["40"]
+  }
+
+  filter {
+    name   = "tag:Name"
+    values = ["Foundry Data"]
+  }
+}
+
 resource "aws_ebs_volume" "foundrydata" {
   availability_zone = aws_default_subnet.default_az1.availability_zone
   size              = 40
