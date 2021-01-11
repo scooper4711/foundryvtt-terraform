@@ -17,21 +17,21 @@ data "aws_ebs_snapshot" "latest_snapshot" {
 
   filter {
     name   = "volume-size"
-    values = ["40"]
+    values = [var.data_volume_size]
   }
 
   filter {
     name   = "tag:Name"
-    values = ["Foundry Data"]
+    values = [var.data_volume_name]
   }
 }
 
 resource "aws_ebs_volume" "foundrydata" {
   availability_zone = aws_default_subnet.default_az1.availability_zone
-  size              = 40
+  size              = var.data_volume_size
 
   tags = {
-    Name = "Foundry Data"
+    Name = var.data_volume_name
   }
 }
 resource "aws_instance" "foundry" {

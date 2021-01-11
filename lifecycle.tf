@@ -57,7 +57,7 @@ resource "aws_dlm_lifecycle_policy" "backup_data" {
     resource_types = ["VOLUME"]
 
     schedule {
-      name = "1 weeks of daily snapshots"
+      name = "1 week of daily snapshots"
 
       create_rule {
         interval      = 24
@@ -73,11 +73,11 @@ resource "aws_dlm_lifecycle_policy" "backup_data" {
         SnapshotCreator = "DLM"
       }
 
-      copy_tags = true
+      copy_tags = false
     }
 
     target_tags = {
-      Snapshot = "true"
+      Name = var.data_volume_name
     }
   }
 }

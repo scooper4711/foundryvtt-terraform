@@ -47,3 +47,15 @@ variable "public_key" {
     type        = string
     description = "the public half of the key pair to allow you to ssh in."
 }
+
+variable "data_volume_name" {
+    type        = string
+    description = "The name to use to indicate data volumes"
+    default     = "Foundry Data"
+}
+
+variable "data_volume_size" {
+    type        = number
+    description = "Size in GB of the EBS data volume to create"
+    default     = 40
+}
