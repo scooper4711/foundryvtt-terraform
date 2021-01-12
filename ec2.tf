@@ -1,5 +1,5 @@
 resource "aws_eip" "foundry" {
-  for_each = var.ec2_instances
+  for_each = { for ec2 in var.ec2_instances : ec2.name => ec2 }
   instance = aws_instance.foundry[each.key].id
   vpc      = true
 }
@@ -50,7 +50,7 @@ resource "aws_instance" "foundry" {
 }
 
 resource "aws_volume_attachment" "ebs_attachment" {
-  for_each    = var.ec2_instances
+  for_each    = { for ec2 in var.ec2_instances : ec2.name => ec2 }
   device_name = "/dev/sdb"
   volume_id   = aws_ebs_volume.foundrydata[each.key].id
   instance_id = aws_instance.foundry[each.key].id
