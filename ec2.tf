@@ -13,7 +13,7 @@ data "aws_ami" "foundry_ami" {
 }
 
 data "aws_ebs_snapshot" "latest_snapshot" {
-  for_each    = var.ec2_instances
+  for_each    = { for ec2 in var.ec2_instances : ec2.name => ec2 }
   most_recent = true
   owners      = ["self"]
 
