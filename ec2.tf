@@ -1,6 +1,6 @@
 resource "aws_eip" "foundry" {
   for_each = var.ec2_instances
-  instance = aws_instance[each.key].id
+  instance = aws_instance.foundry[each.key].id
   vpc      = true
 }
 data "aws_ami" "foundry_ami" {
