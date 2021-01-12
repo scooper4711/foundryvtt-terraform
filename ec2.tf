@@ -29,7 +29,7 @@ data "aws_ebs_snapshot" "latest_snapshot" {
 }
 
 resource "aws_ebs_volume" "foundrydata" {
-  for_each          = var.ec2_instances
+  for_each          = { for ec2 in var.ec2_instances : ec2.name => ec2 }
   availability_zone = aws_default_subnet.default_az1.availability_zone
   size              = each.value.ebs_size
 
@@ -39,7 +39,7 @@ resource "aws_ebs_volume" "foundrydata" {
   }
 }
 resource "aws_instance" "foundry" {
-  for_each             = var.ec2_instances
+  for_each             = { for ec2 in var.ec2_instances : ec2.name => ec2 }
   ami                  = data.aws_ami.foundry_ami.id
   instance_type        = var.instance_size
   user_data            = templatefile("${path.module}/startup.sh",{domain=var.domain, foundry_download=var.foundry_download})
