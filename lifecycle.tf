@@ -77,7 +77,7 @@ resource "aws_dlm_lifecycle_policy" "backup_data" {
     }
 
     target_tags = {
-      Name = var.data_volume_name
+      Function = "fvtt_data"
     }
   }
 }

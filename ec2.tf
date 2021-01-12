@@ -1,6 +1,6 @@
 resource "aws_eip" "foundry" {
   for_each = var.ec2_instances
-  instance = aws_instance.each.key.id
+  instance = aws_instance.each.value.id
   vpc      = true
 }
 data "aws_ami" "foundry_ami" {
@@ -31,10 +31,11 @@ data "aws_ebs_snapshot" "latest_snapshot" {
 resource "aws_ebs_volume" "foundrydata" {
   for_each          = var.ec2_instances
   availability_zone = aws_default_subnet.default_az1.availability_zone
-  size              = each.key.ebs_size
+  size              = each.value.ebs_size
 
   tags = {
-    Name = each.key.ebs_name
+    Name     = each.value.ebs_name
+    Function = "fvtt_data"
   }
 }
 resource "aws_instance" "foundry" {
