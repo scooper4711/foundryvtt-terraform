@@ -1,5 +1,6 @@
 resource "aws_eip" "foundry" {
-  instance = aws_instance.foundry.id
+  for_each = var.ec2_instances
+  instance = aws_instance.each.key.id
   vpc      = true
 }
 data "aws_ami" "foundry_ami" {
@@ -18,12 +19,12 @@ data "aws_ebs_snapshot" "latest_snapshot" {
 
   filter {
     name   = "volume-size"
-    values = [each.key.ebs_size]
+    values = [each.value.ebs_size]
   }
 
   filter {
     name   = "tag:Name"
-    values = [each.key.ebs_name]
+    values = [each.value.ebs_name]
   }
 }
 
