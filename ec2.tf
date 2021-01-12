@@ -12,29 +12,32 @@ data "aws_ami" "foundry_ami" {
 }
 
 data "aws_ebs_snapshot" "latest_snapshot" {
+  for_each    = var.ec2_instances
   most_recent = true
   owners      = ["self"]
 
   filter {
     name   = "volume-size"
-    values = [var.data_volume_size]
+    values = [each.key.ebs_size]
   }
 
   filter {
     name   = "tag:Name"
-    values = [var.data_volume_name]
+    values = [each.key.ebs_name]
   }
 }
 
 resource "aws_ebs_volume" "foundrydata" {
+  for_each          = var.ec2_instances
   availability_zone = aws_default_subnet.default_az1.availability_zone
-  size              = var.data_volume_size
+  size              = each.key.ebs_size
 
   tags = {
-    Name = var.data_volume_name
+    Name = each.key.ebs_name
   }
 }
 resource "aws_instance" "foundry" {
+  for_each             = var.ec2_instances
   ami                  = data.aws_ami.foundry_ami.id
   instance_type        = var.instance_size
   user_data            = templatefile("${path.module}/startup.sh",{domain=var.domain, foundry_download=var.foundry_download})
@@ -44,10 +47,11 @@ resource "aws_instance" "foundry" {
   vpc_security_group_ids      = [aws_security_group.allow_http.id,aws_security_group.ssh_from_home.id]
 }
 
-resource "aws_volume_attachment" "ebs_att" {
+resource "aws_volume_attachment" "ebs_attachment" {
+  for_each    = var.ec2_instances
   device_name = "/dev/sdb"
-  volume_id   = aws_ebs_volume.foundrydata.id
-  instance_id = aws_instance.foundry.id
+  volume_id   = aws_ebs_volume.foundrydata.each.key.id
+  instance_id = aws_instance.foundry.each.key.id
 }
 
 resource "aws_iam_instance_profile" "foundry_profile" {
