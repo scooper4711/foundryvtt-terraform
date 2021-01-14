@@ -1,6 +1,6 @@
 resource "aws_iam_role_policy" "foundry_s3_access_policy" {
-  name = "foundry_s3_access_policy"
-  role = aws_iam_role.foundry_role.id
+  name   = "foundry_s3_access_policy"
+  role   = aws_iam_role.foundry_role.id
   policy = <<EOF
 {
     "Version": "2012-10-17",
