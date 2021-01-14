@@ -63,7 +63,7 @@ if [[ ! -f /etc/httpd/conf.d/foundry.conf ]]; then
     SSLCertificateChainFile /etc/pki/tls/certs/${domain}/fullchain.pem
 </VirtualHost>
 <VirtualHost *:80>
-    ServerName              www.${domain}
+    ServerName              ${name}.${domain}
     # Anything starting with a 'dot' might be part of the let's encrypt program. Don't redirect it
     <Location ~ "^/\..*$">
     </Location>
