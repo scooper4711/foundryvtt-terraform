@@ -73,7 +73,7 @@ resource "aws_dlm_lifecycle_policy" "backup_data" {
         SnapshotCreator = "DLM"
       }
 
-      copy_tags = false
+      copy_tags = true
     }
 
     target_tags = {

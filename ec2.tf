@@ -32,7 +32,7 @@ resource "aws_ebs_volume" "foundrydata" {
   for_each          = { for ec2 in var.ec2_instances : ec2.name => ec2 }
   availability_zone = aws_default_subnet.default_az1.availability_zone
   size              = each.value.ebs_size
-
+  snapshot_id       = aws_ebs_volume.latest_snapshot[each.key].id
   tags = {
     Name     = each.value.ebs_name
     Function = "fvtt_data"
