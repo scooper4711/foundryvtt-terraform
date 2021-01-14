@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Starting user data"
 echo "Set a consistent server name for FoundryVTT Licensing"
-hostnamectl set-hostname foundryvtt.${domain}
+hostnamectl set-hostname ${server}.${domain}
 
 if [[ ! -z "${foundry_download}" && ! -d /home/ec2-user/foundryvtt ]] ; then
     echo "Downloading FoundryVTT software"
@@ -33,8 +33,8 @@ if [[ ! -d /root/.acme.sh ]]; then
     curl https://get.acme.sh | sh
     # Need http running to get a cert issued
     systemctl start httpd
-    /root/.acme.sh/acme.sh --issue -d www.${domain} -w /var/www/html --debug
-    /root/.acme.sh/acme.sh --install-cert -d www.${domain} \
+    /root/.acme.sh/acme.sh --issue -d ${server}.${domain} -w /var/www/html --debug
+    /root/.acme.sh/acme.sh --install-cert -d ${server}.${domain} \
         --cert-file /etc/pki/tls/certs/${domain}/cert.pem \
         --key-file /etc/pki/tls/certs/${domain}/key.pem  \
         --fullchain-file /etc/pki/tls/certs/${domain}/fullchain.pem
