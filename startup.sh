@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Starting user data"
 echo "Set a consistent server name for FoundryVTT Licensing"
-hostnamectl set-hostname ${server}.${domain}
+hostnamectl set-hostname ${name}.${domain}
 
 if [[ ! -z "${foundry_download}" && ! -d /home/ec2-user/foundryvtt ]] ; then
     echo "Downloading FoundryVTT software"
