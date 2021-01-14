@@ -31,6 +31,8 @@ if [[ ! -d /root/.acme.sh ]]; then
     mkdir /etc/pki/tls/certs/${domain}
     export HOME=/root
     curl https://get.acme.sh | sh
+fi
+if ! /root/.acme.sh/acme.sh --list | grep ${server}.${domain}; then
     # Need http running to get a cert issued
     systemctl start httpd
     /root/.acme.sh/acme.sh --issue -d ${server}.${domain} -w /var/www/html --debug
@@ -44,7 +46,7 @@ if [[ ! -f /etc/httpd/conf.d/foundry.conf ]]; then
     echo "Create http configuration for FoundryVTT"
     cat > /etc/httpd/conf.d/foundry.conf <<eof
 <VirtualHost _default_:443>
-    ServerName              www.${domain}
+    ServerName              ${name}.${domain}
     # Proxy Server Configuration
     ProxyPreserveHost       On
     ProxyPass "/socket.io/" "ws://localhost:30000/socket.io/"
