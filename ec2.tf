@@ -42,7 +42,7 @@ resource "aws_instance" "foundry" {
   for_each               = { for ec2 in var.ec2_instances : ec2.name => ec2 }
   ami                    = data.aws_ami.foundry_ami.id
   instance_type          = var.instance_size
-  user_data              = templatefile("${path.module}/startup.sh", { server=each.key, domain = var.domain, foundry_download = var.foundry_download })
+  user_data              = templatefile("${path.module}/startup.sh", { name=each.value.name, domain = var.domain, foundry_download = var.foundry_download })
   subnet_id              = aws_default_subnet.default_az1.id
   iam_instance_profile   = aws_iam_instance_profile.foundry_profile.id
   key_name               = aws_key_pair.login.key_name
