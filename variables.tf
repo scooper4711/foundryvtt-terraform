@@ -51,5 +51,5 @@ variable "public_key" {
 variable "ec2_instances" {
   type        = set(object({ name = string, ebs_name = string, ebs_size = number }))
   description = "A list objects defining a server"
-  default     = [{ name = "www", ebs_name = "Foundry Data", ebs_size = 40 }]
+  default     = [{ name = "www", ebs_name = "Foundry Data", ebs_size = 12 }]
 }
