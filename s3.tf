@@ -19,8 +19,8 @@ resource "aws_iam_role_policy" "foundry_s3_access_policy" {
                 "s3:PutObjectAcl"
             ],
             "Resource": [
-                "arn:aws:s3:::vtt-assets",
-                "arn:aws:s3:::vtt-assets/*"
+                "arn:aws:s3:::vtt-assets-${var.domain}",
+                "arn:aws:s3:::vtt-assets-${var.domain}/*"
             ]
         }
     ]
