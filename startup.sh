@@ -2,7 +2,10 @@
 echo "Starting user data"
 echo "Set a consistent server name for FoundryVTT Licensing"
 hostnamectl set-hostname ${name}.${domain}
-
+echo "Enable amazon ssm agent"
+sudo systemctl enable amazon-ssm-agent
+sudo systemctl start amazon-ssm-agent
+sudo systemctl status amazon-ssm-agent
 if [[ ! -z "${foundry_download}" && ! -d /home/ec2-user/foundryvtt ]] ; then
     echo "Downloading FoundryVTT software"
     mkdir /home/ec2-user/foundryvtt
