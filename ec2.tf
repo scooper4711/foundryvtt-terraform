@@ -5,10 +5,10 @@ resource "aws_eip" "foundry" {
 }
 data "aws_ami" "foundry_ami" {
   most_recent = true
-  owners      = [var.ami_owner]
+  owners      = ["self"]
   filter {
     name   = "name"
-    values = list(var.ami_wildcard)
+    values = ["foundryvtt-0.8"]
   }
 }
 

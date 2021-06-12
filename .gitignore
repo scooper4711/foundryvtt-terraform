@@ -1,1 +1,4 @@
 .terraform*
+packer/foundryvtt-*.zip
+packer/foundry.conf
+packer/inharnsway.auto.pkrvars.hcl
