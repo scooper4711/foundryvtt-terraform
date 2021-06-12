@@ -1,0 +1,9 @@
+[Unit]
+Description=Foundry VTT
+
+[Service]
+ExecStart=/usr/bin/node /home/ec2-user/foundryvtt/resources/app/main.js --dataPath=/home/ec2-user/foundrydata
+User=ec2-user
+
+[Install]
+WantedBy=default.target
