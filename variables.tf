@@ -51,5 +51,5 @@ variable "name" {
 variable "ebs_name" {
   type        = string
   description = "The name tag which identifies the ebs volume to mount as /home/ec2-user/foundrydata"
-  default     = "Foundry Data"
+  default     = "Foundry Data*"
 }
