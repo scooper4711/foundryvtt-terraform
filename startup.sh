@@ -9,7 +9,7 @@ fi
 if ! /root/.acme.sh/acme.sh --list | grep ${name}.${domain}; then
     echo "Getting SSL certificate for ${name}.${domain} from Let's Encrypt!"
     systemctl start httpd
-    /etc/pki/tls/certs/${domain}
+    mkdir /etc/pki/tls/certs/${domain}
     /root/.acme.sh/acme.sh --issue -d ${name}.${domain} -w /var/www/html --debug
     /root/.acme.sh/acme.sh --install-cert -d ${name}.${domain} \
         --cert-file /etc/pki/tls/certs/${domain}/cert.pem \
