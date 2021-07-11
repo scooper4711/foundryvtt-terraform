@@ -21,9 +21,10 @@ sudo yum -y install httpd mod_ssl openssl-devel nodejs socat
 
 echo "Create a foundryvtt service"
 sudo mv /tmp/foundryvtt.service /etc/systemd/system/foundryvtt.service
-sudo mv /tmp/foundry.conf /etc/httpd/conf.d/foundry.conf
+# This conf file won't work until we have SSL certs (provided in terraform)
+sudo mv /tmp/foundry.conf /etc/httpd/conf.d/foundry.conf.disabled
 sudo cat /etc/fstab /tmp/fstab >> /tmp/fstab2
-sudo mv /etc/fstab2 /tmp/fstab
+sudo mv /tmp/fstab2 /etc/fstab
 
 sudo systemctl enable foundryvtt
 sudo systemctl enable httpd

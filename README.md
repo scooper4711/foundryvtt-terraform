@@ -9,34 +9,46 @@ This guide assumes some familarity with AWS and limited familiarity with Terrafo
    and secret access key.
 
 # Setup
+This setup requires two tools - packer to create the AMI with the base foundry install, and terraform to create the infrastructure such as ec2 instances and security groups.
  1. Fork this repo
- 1. Create a Terraform workspace and point it to your new fork
- 1. In the Variables section of your Terraform workspace, specify the following variables
+ 2. Make sure you can run packer locally (``brew install packer``) on your computer and your AWS Access Keys are configured, e.g. ``aws configure``
+ 3. cd to packer
+ 4. Download the latest version of foundry vtt to this directory. It should be the linux version and it will be named something like ``foundryvtt-0.8.8.zip``
+ 5. create a var file ``www.auto.pkrvars.hcl`` with the following variable settings
+    ```
+    name = "www"
+    domain = "yourdomain.com"
+    region = "your preferred region"
+    foundryvtt = "path-to-your-zip"
+    ```
+ 6. If running for the very first time, then run packer with the var file. e.g. ``packer build --var-file www.auto.pkrvars.hcl foundry.pkr.hcl``
+ 7. If you already have a Foundry Data volume and are just making a new AMI for a new release, then run packer with ``packer build -only FoundryAMI\* --var-file iwww.auto.pkrvars.hcl foundry.pkr.hcl``
+
+You now have a base AMI which has foundry installed on it, but no SSL certificates. You should also have a Foundry Data volume
+
+ 7. Create a Terraform workspace and point it to your new fork
+ 8. In the Variables section of your Terraform workspace, specify the following variables
     - home_cidr - required - your IP address to the word, followed by a /32. This will allow you to SSH to your server, and no one else. E.g. 34.56.78.90/32
     - domain - required - the domain you bought. Foundry will register itself as https://www.```${domain}```
     - public_key - required - the public key you use for ssh. On a mac or linux system it's located in ~/.ssh/id_rsa.pub. On Windows it varies based on what ssh program you use.
-    - ami_wildcard - optional - The name (with a wildcard if you want) of the AMI to start from. E.g. ```amzn2-ami-hvm-2.0.20201126.0-x86_64-gp2```
-    - ami_owner - optional - the owner of the AMI you want to use. This may be you, or it may be the amazon id ```137112412989```. (You can find this in the details portion of EC2->AMI section of the AWS console)
     - instance_size - optional - The EC2 instance type you want to use. t3a.micro works just fine.
     - region - optional - The region to deploy to. Pick one close to you and your players. 
-    - foundry_download - optional - Your 5 minute URL for downloading FoundryVTT. If not provided, or if the software is already downloaded, then this variable has no effect. But it's required to get you started.
- 1. Still in the Variables section, under environment variables, create/set the following variables (set to sensitive!)
+ 9.  Still in the Variables section, under environment variables, create/set the following variables (set to sensitive!)
     - AWS_ACCESS_KEY_ID
     - AWS_SECRET_ACCESS_KEY
     - AWS_DEFAULT_REGION (doesn't have to be set to sensitive)
- 1. Here's what your variables screen should look like when done, if you specify all optional values:
+ 10. Here's what your variables screen should look like when done, if you specify all optional values:
     - ![](img/Variables.png)
- 1. Get your 5-minute URL for downloading Foundry and put it into the variable ```foundry_download```. ![Location of 5-minute-url](img/FoundryURL.png)
- 1. Queue the running of the plan.
- 1. Apply the plan.
- 1. The plan may not succeed this round (if nothing else, it will fail to get the SSL cert), but now you have Route53 set-up.
- 1. In the AWS console, go to Route53, go to your hosted zone, and for your domain get the ```value/route traffic to``` values for your name servers.
- 1. Wherever your registered your domain, update its DNS records to point to the values from the previous step. This may take some 10-30 minutes to propogate to the wider internet.
+ 12. Queue the running of the plan.
+ 13. Apply the plan.
+ 14. The plan may not succeed the very first time (if nothing else, it will fail to get the SSL cert), but now you have Route53 set-up.
+ 15. In the AWS console, go to Route53, go to your hosted zone, and for your domain get the ```value/route traffic to``` values for your name servers.
+ 16. Wherever your registered your domain, update its DNS records to point to the values from the previous step. This may take some 10-30 minutes to propogate to the wider internet.
     - This will move all domain control away from your registrar and over to Route53 and Terraform.
- 1. Terminate your ec2 instance if it's running.
- 1. re-run your plan. Note that you may need to get a new 5-minute FoundryVTT download URL. Now the SSL cert should work.
- 1. Log in to your FoundryVTT instance. You should be able to ssh to ec2-user@www.yourdomain.
- 1. Edit the file foundrydata/Config/options.json and add the following
+ 17. Terminate your ec2 instance if it's running.
+ 18. re-run your plan. 
+ 19. Log in to your FoundryVTT instance. You should be able to ssh to ec2-user@www.yourdomain.
+ 20. Edit the file foundrydata/Config/options.json and add the following
     ```
     "upnp": false,
     "hostname": "www.<yourdomain>",
@@ -44,7 +56,7 @@ This guide assumes some familarity with AWS and limited familiarity with Terrafo
     "proxySSL": true,
     "proxyPort": 443,
     ```
- 1. Restart your foundry by executing ```sudo systemctl restart foundryvtt```
- 1. Your foundry should be available at https://www.${domain}.
- 1. Once you validate that your foundry is working, you will want to make an AMI of it so you don't have to get new 5-minute URLs all the time.
- 1. After you make your AMI, update the variables to point to to the AMI name and owner.
+ 21. Restart your foundry by executing ```sudo systemctl restart foundryvtt```
+ 22. Your foundry should be available at https://www.${domain}.
+ 23. Once you validate that your foundry is working, you will want to make an AMI of it so you don't have to get new 5-minute URLs all the time.
+ 24. After you make your AMI, update the variables to point to to the AMI name and owner.

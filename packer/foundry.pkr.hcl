@@ -8,9 +8,9 @@ packer {
 }
 
 source "amazon-ebs" "foundry-08" {
-  ami_name      = "foundryvtt-0.8"
+  ami_name      = "foundryvtt-0.8.8"
   instance_type = "t2.micro"
-  region        = "us-west-2"
+  region        = var.region
   source_ami_filter {
     filters = {
       name                = "amzn2-ami-hvm-2.0.*.0-x86_64-gp2"
@@ -51,7 +51,7 @@ source "file" "httpd-conf" {
     </Location>
     # If it *doesn't start with a dot, then re-direct it to https.
     <Location ~ "(^$|^/[^\.].*$)">
-        Redirect / https://www.${var.domain}/
+        Redirect / https://${var.name}.${var.domain}/join
     </Location>
 </VirtualHost>
 # Increase the maximum upload limit Apache will allow
@@ -71,21 +71,27 @@ variable "name" {
   default = "www"
 }
 
-build {
-  sources = ["sources.file.httpd-conf"]
+variable "region" {
+  type    = string
+  default = "us-west-2"
 }
 
+variable "foundryvtt-zip" {
+  type = string
+}
 
 build {
+  name  = "FoundryAMI"
   sources = [
+    "sources.file.httpd-conf",
     "sources.amazon-ebs.foundry-08"
   ]
   provisioner "file" {
-    source      = "foundryvtt-0.8.6.zip"
+    source      = "foundryvtt.zip"
     destination = "/tmp/foundryvtt.zip"
   }
   provisioner "file" {
-    source      = "foundry.conf"
+    source      = var.foundryvtt-zip
     destination = "/tmp/foundry.conf"
   }
   provisioner "file" {
@@ -98,5 +104,41 @@ build {
   }
   provisioner "shell" {
     script = "provision.sh"
+  }
+}
+
+source "amazon-ebsvolume" "foundrydata" {
+  instance_type = "t2.micro"
+  region        = var.region
+  source_ami_filter {
+    filters = {
+      name                = "amzn2-ami-hvm-2.0.*.0-x86_64-gp2"
+      root-device-type    = "ebs"
+      virtualization-type = "hvm"
+    }
+    most_recent = true
+    owners      = ["063843753876"]
+  }
+  ssh_username = "ec2-user"
+
+  ebs_volumes {
+      volume_type = "gp2"
+      device_name = "/dev/sdb"
+      delete_on_termination = false
+      tags = {
+        Name = "Foundry Data"
+      }
+      volume_size = 10
+  }
+
+}
+
+build {
+  name = "FoundryData"
+  sources = ["sources.amazon-ebsvolume.foundrydata"]
+  provisioner "shell" {
+    inline = [
+        "sudo mkfs -t xfs /dev/sdb"
+      ]
   }
 }
