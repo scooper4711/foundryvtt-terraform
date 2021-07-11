@@ -16,14 +16,14 @@ data "aws_ami" "foundry_ami" {
 data "aws_ebs_volume" "foundrydata" {
   most_recent = true
   filter {
-    name = "tag:Name"
+    name   = "tag:Name"
     values = [var.ebs_name]
   }
 }
 resource "aws_instance" "foundry" {
   ami                    = data.aws_ami.foundry_ami.id
   instance_type          = var.instance_size
-  user_data              = templatefile("${path.module}/startup.sh", { name=var.name, domain = var.domain })
+  user_data              = templatefile("${path.module}/startup.sh", { name = var.name, domain = var.domain })
   subnet_id              = aws_default_subnet.default_az1.id
   iam_instance_profile   = aws_iam_instance_profile.foundry_profile.id
   key_name               = aws_key_pair.login.key_name

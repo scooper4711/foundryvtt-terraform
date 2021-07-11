@@ -43,13 +43,13 @@ variable "public_key" {
 }
 
 variable "name" {
-  type = string
+  type        = string
   description = "The domain name for your instance, e.g. www"
-  default = "www"
+  default     = "www"
 }
 
 variable "ebs_name" {
-  type = string
+  type        = string
   description = "The name tag which identifies the ebs volume to mount as /home/ec2-user/foundrydata"
-  default = "Foundry Data"
+  default     = "Foundry Data"
 }

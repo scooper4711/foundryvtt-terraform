@@ -25,7 +25,7 @@ source "amazon-ebs" "foundry-08" {
 }
 
 source "file" "httpd-conf" {
-  target = "foundry.conf"
+  target  = "foundry.conf"
   content = <<EOF
 <VirtualHost _default_:443>
     ServerName              ${var.name}.${var.domain}
@@ -81,7 +81,7 @@ variable "foundryvtt-zip" {
 }
 
 build {
-  name  = "FoundryAMI"
+  name = "FoundryAMI"
   sources = [
     "sources.file.httpd-conf",
     "sources.amazon-ebs.foundry-08"
@@ -122,23 +122,23 @@ source "amazon-ebsvolume" "foundrydata" {
   ssh_username = "ec2-user"
 
   ebs_volumes {
-      volume_type = "gp2"
-      device_name = "/dev/sdb"
-      delete_on_termination = false
-      tags = {
-        Name = "Foundry Data"
-      }
-      volume_size = 10
+    volume_type           = "gp2"
+    device_name           = "/dev/sdb"
+    delete_on_termination = false
+    tags = {
+      Name = "Foundry Data"
+    }
+    volume_size = 10
   }
 
 }
 
 build {
-  name = "FoundryData"
+  name    = "FoundryData"
   sources = ["sources.amazon-ebsvolume.foundrydata"]
   provisioner "shell" {
     inline = [
-        "sudo mkfs -t xfs /dev/sdb"
-      ]
+      "sudo mkfs -t xfs /dev/sdb"
+    ]
   }
 }
