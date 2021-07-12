@@ -8,7 +8,7 @@ data "aws_ami" "foundry_ami" {
   owners      = ["self"]
   filter {
     name   = "name"
-    values = ["foundryvtt-0.8"]
+    values = ["foundryvtt*"]
   }
 }
 
