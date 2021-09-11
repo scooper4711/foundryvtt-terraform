@@ -47,7 +47,7 @@ resource "aws_iam_role" "foundry_role" {
   EOF
 }
 resource "aws_s3_bucket" "vtt-assets" {
-  bucket = "vtt-assets-${var.domain}"
+  bucket = "vtt-assets-${replace(var.domain,".","-")}"
   acl    = "public-read"
   cors_rule {
     allowed_headers = ["*"]
